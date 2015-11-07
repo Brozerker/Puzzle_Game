@@ -68,5 +68,5 @@ public:
 
 	// week 2
 	void play();
-	vector<vector<int>>  IDFS(int depth, vector<int> currentBoard);
+	bool  IDFS(int depth, vector<int> currentBoard);
 };
