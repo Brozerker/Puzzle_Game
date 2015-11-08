@@ -11,6 +11,15 @@
 #include <iostream>
 using namespace std;
 
+struct board {
+public:
+	bool lookedAt;
+	vector<int> me;
+	board() {}
+	board(vector<int> passed) : me(passed), lookedAt(false) {}
+	~board(){}
+};
+
 class Puzzle {
 	//week 1
 	bool running;
@@ -18,21 +27,21 @@ class Puzzle {
 	int currentNum = 00;
 	int posToSkip;
 	int turns;
-	vector<int> moveChoices;
-	vector<int> moveRight, moveLeft, moveUp, moveDown;
-	vector<int> puzzleBoard, previousBoard, wonBoard;
-	vector<vector<int>> previousBoardList;
+	board moveChoices;
+	board moveRight, moveLeft, moveUp, moveDown;
+	board puzzleBoard, previousBoard, wonBoard;
+	vector<board> previousBoardList;
 	int topLeftCorner, bottomLeftCorner, bottomRightCorner, topRightCorner;
 	//week 2
 	bool solved; 
 	int totalBoardStates;
 	int maxDepth, currentDepth;
-	vector<int> currentBoard;
-	vector<vector<int>> solutionPath, recursePath;
-	vector<int> * choiceBoards[4];
+	board currentBoard;
+	vector<board> solutionPath, recursePath;
+	board * choiceBoards[4];
 	
 public:
-	vector<int> startBoard;
+	board startBoard;
 	Puzzle() : n(4) {}
 	Puzzle(int n) : n(n), running(true), turns(0), solved(false), totalBoardStates(0), maxDepth(0), currentDepth(0) {
 		srand(clock());
@@ -50,24 +59,24 @@ public:
 	~Puzzle(){}
 
 	void shuffleBoard(int timesToShuffle);
-	void drawBoard(vector<int> board);
+	void drawBoard(board board);
 	void drawTempBoard(int direction);
 	void setNewBoard(int direction);
 	void drawChoices();
 	
 	void draw();
 	void input();
-	void figureOutChoices(vector<int>);
+	vector<board> figureOutChoices(board);
 	void createBoard();
 	void randomizeBoard();
 	//void changePosToSkip(int);
-	void swapPositions(vector<int> &board, int pos1, int pos2);
+	void swapPositions(board &board, int pos1, int pos2);
 	void swapBoardPositions(int pos1, int pos2);
 	void checkWin();
 	bool isRunning();
-	void setChoiceBoard(int direction);
+	board setChoiceBoard(int direction, board);
 
 	// week 2
 	void play();
-	bool  IDFS(int depth, vector<int> currentBoard);
+	bool  IDFS(int depth, board currentBoard);
 };

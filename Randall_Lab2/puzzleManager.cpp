@@ -9,23 +9,23 @@ void Puzzle::shuffleBoard(int timesToShuffle) {
 		previousBoard = puzzleBoard;
 		figureOutChoices(puzzleBoard);
 		bool goodPos = false;
-		int toSkip = rand()% moveChoices.size();
-		setNewBoard(moveChoices[toSkip]);
-		if (puzzleBoard == previousBoard)
+		int toSkip = rand()% moveChoices.me.size();
+		setNewBoard(moveChoices.me[toSkip]);
+		if (puzzleBoard.me == previousBoard.me)
 			i--;
 	}
-	if (puzzleBoard == wonBoard)
+	if (puzzleBoard.me == wonBoard.me)
 		shuffleBoard(timesToShuffle);
-	startBoard = puzzleBoard;
+	startBoard.me = puzzleBoard.me;
 }
 
 // displays the passed vector as a grid
-void Puzzle::drawBoard(vector<int> board) {
+void Puzzle::drawBoard(board board) {
 	for (int x = 0; x < n; x++) {
 		for (int y = 0; y < n; y++) {
 			int currentPos = (x * n) + y;
-			if (board[currentPos] != 00)
-				printf("%02i ", board[currentPos]);
+			if (board.me[currentPos] != 00)
+				printf("%02i ", board.me[currentPos]);
 			else
 				printf("   ");
 		}
@@ -36,7 +36,7 @@ void Puzzle::drawBoard(vector<int> board) {
 // draws a temporary board without storing any of the changes
 // to be used for potential moves.
 void Puzzle::drawTempBoard(int direction) {
-	vector<int> tempBoard(puzzleBoard);
+	board tempBoard(puzzleBoard.me);
 	int tempPos = posToSkip;
 	switch (direction) {
 	case(UP) :
@@ -66,35 +66,37 @@ void Puzzle::drawTempBoard(int direction) {
 	cout << endl;
 }
 
-void Puzzle::setChoiceBoard(int direction) {
+board Puzzle::setChoiceBoard(int direction, board currentB) {
+	board tempBoard = currentB;
 	int tempPos = posToSkip;
 	switch (direction) {
 	case(UP) :
 		tempPos -= n;
-		moveUp.clear();
-		moveUp = currentBoard;
-		swapPositions(moveUp, posToSkip, tempPos);
+		//moveUp.me.clear();
+		//moveUp = currentBoard;
+		//swapPositions(moveUp, posToSkip, tempPos);
 		break;
 	case(DOWN) :
 		tempPos += n;
-		moveDown.clear();
-		moveDown = currentBoard;
-		swapPositions(moveDown, posToSkip, tempPos);
+		//moveDown.me.clear();
+		//moveDown = currentBoard;
+		//swapPositions(moveDown, posToSkip, tempPos);
 		break;
 	case(LEFT) :
 		tempPos -= 1;
-		moveLeft.clear();
-		moveLeft = currentBoard;
-		swapPositions(moveLeft, posToSkip, tempPos);
+		//moveLeft.me.clear();
+		//moveLeft = currentBoard;
+		//swapPositions(moveLeft, posToSkip, tempPos);
 		break;
 	case(RIGHT) :
 		tempPos += 1;
-		moveRight.clear();
-		moveRight = currentBoard;
-		swapPositions(moveRight, posToSkip, tempPos);
+		//moveRight.me.clear();
+		//moveRight = currentBoard;
+		//swapPositions(moveRight, posToSkip, tempPos);
 		break;
 	}
-
+	swapPositions(tempBoard, posToSkip, tempPos);
+	return tempBoard;
 }
 
 // sets the main board based on user input 
@@ -129,75 +131,78 @@ void Puzzle::setNewBoard(int direction) {
 }
 
 // figures out how many potential moves the user has
-void Puzzle::figureOutChoices(vector<int> currentBoard) {
-	for (int i = 0; i < currentBoard.size(); ++i) {
-		if (currentBoard[i] == 00) {
+vector<board> Puzzle::figureOutChoices(board currentBoard) {
+	vector<board> toReturn;
+	for (int i = 0; i < currentBoard.me.size(); ++i) {
+		if (currentBoard.me[i] == 00) {
 			posToSkip = i;
 			break;
 		}
 	}
-	moveChoices.clear();
+	moveChoices.me.clear();
 	if (posToSkip == topLeftCorner) {		// top left corner
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(RIGHT);
 	}
 	else if(posToSkip == topRightCorner) {		// top right corner
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(LEFT);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(LEFT);
 	}
 	else if (posToSkip == bottomLeftCorner) {	// bottom left corner
-		moveChoices.push_back(UP);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(RIGHT);
 	}
 	else if (posToSkip == bottomRightCorner) {	// bottom right corner
-		moveChoices.push_back(UP);
-		moveChoices.push_back(LEFT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(LEFT);
 	}
 	else if (posToSkip < n) {						// top edge
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(LEFT);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(LEFT);
+		moveChoices.me.push_back(RIGHT);
 	}
 	else if (posToSkip > bottomRightCorner - n) {	// bottom edge
-		moveChoices.push_back(UP);
-		moveChoices.push_back(LEFT);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(LEFT);
+		moveChoices.me.push_back(RIGHT);
 	}
 	else if (posToSkip % n == 0) {					// left edge
-		moveChoices.push_back(UP);
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(RIGHT);
 	}
 	else if (posToSkip % n == n - 1) {				// right edge
-		moveChoices.push_back(UP);
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(LEFT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(LEFT);
 	}
 	else {
-		moveChoices.push_back(UP);
-		moveChoices.push_back(DOWN);
-		moveChoices.push_back(LEFT);
-		moveChoices.push_back(RIGHT);
+		moveChoices.me.push_back(UP);
+		moveChoices.me.push_back(DOWN);
+		moveChoices.me.push_back(LEFT);
+		moveChoices.me.push_back(RIGHT);
 	}
-	for (int i = 0; i < moveChoices.size(); ++i) {
-		setChoiceBoard(moveChoices[i]);
+	for (int i = 0; i < moveChoices.me.size(); ++i) {
+		toReturn.push_back(setChoiceBoard(moveChoices.me[i], currentBoard));
 	}
+
+	return toReturn;
 }
 
 // draws the potential choices for the users next move
 void Puzzle::drawChoices() {
 	//figureOutChoices();
 	cout << "Here are your choices for the next move:" << endl;
-	for (int i = 0; i < moveChoices.size(); ++i) {
+	for (int i = 0; i < moveChoices.me.size(); ++i) {
 		cout << "(" << i + 1 << ")" << endl;
-		drawTempBoard(moveChoices[i]);
+		drawTempBoard(moveChoices.me[i]);
 	}
 }
 
 // main draw function to be called by main
 void Puzzle::draw() {
 	//cout << "\n\nHere's the current board" << endl;
-	drawBoard(puzzleBoard);
+	drawBoard(puzzleBoard.me);
 	cout << endl;
 	drawChoices();
 }
@@ -209,49 +214,49 @@ void Puzzle::input() {
 	do {
 		cout << "choose one of the boards above" << endl;
 		cin >> input;
-	} while (input > moveChoices.size());
+	} while (input > moveChoices.me.size());
 	turns++;
 	previousBoardList.push_back(puzzleBoard);
-	setNewBoard(moveChoices[input - 1]);
+	setNewBoard(moveChoices.me[input - 1]);
 
 }
 
 // initializes the puzzle board
 void Puzzle::createBoard() {
-	wonBoard.clear();
-	puzzleBoard.clear();
+	wonBoard.me.clear();
+	puzzleBoard.me.clear();
 	for (int i = 1; i <= (n * n) - 1; ++i) {
-		puzzleBoard.push_back(i);
-		wonBoard.push_back(i);
+		puzzleBoard.me.push_back(i);
+		wonBoard.me.push_back(i);
 	}
-	puzzleBoard.push_back(0);
-	wonBoard.push_back(0);
+	puzzleBoard.me.push_back(0);
+	wonBoard.me.push_back(0);
 	posToSkip = (n*n) - 1;
 }
 
 // randomizes board. Is replaced by shuffleBoard
 void Puzzle::randomizeBoard() {
 	createBoard();
-	for (int i = 0; i < puzzleBoard.size(); ++i) {
-		int randPos = rand() % puzzleBoard.size();
+	for (int i = 0; i < puzzleBoard.me.size(); ++i) {
+		int randPos = rand() % puzzleBoard.me.size();
 		swapBoardPositions(i, randPos);
 	}
-	puzzleBoard.push_back(0);
+	puzzleBoard.me.push_back(0);
 	posToSkip = (n*n) - 1;
 }
 
 // swaps the numbers of two positions in the main puzzleBoard
 void Puzzle::swapBoardPositions(int pos1, int pos2) {
-	int tempInt = puzzleBoard[pos1];
-	puzzleBoard[pos1] = puzzleBoard[pos2];
-	puzzleBoard[pos2] = tempInt;
+	int tempInt = puzzleBoard.me[pos1];
+	puzzleBoard.me[pos1] = puzzleBoard.me[pos2];
+	puzzleBoard.me[pos2] = tempInt;
 }
 
 // swaps two numbers in the passed board
-void Puzzle::swapPositions(vector<int> &board, int pos1, int pos2) {
-	int tempInt = board[pos1];
-	board[pos1] = board[pos2];
-	board[pos2] = tempInt;
+void Puzzle::swapPositions(board &board, int pos1, int pos2) {
+	int tempInt = board.me[pos1];
+	board.me[pos1] = board.me[pos2];
+	board.me[pos2] = tempInt;
 }
 
 // checks if win conditions have been met
@@ -304,8 +309,9 @@ void Puzzle::play() {
 	checkWin();
 }
 
-bool Puzzle::IDFS(int depth, vector<int> currentBoard) {
-	//if (currentBoard == previousBoard) {
+bool Puzzle::IDFS(int depth, board currentBoard) {
+	this->currentBoard = currentBoard;
+	//if (currentBoard.me == previousBoard.me) {
 	//	solutionPath.pop_back();
 	//	return false;
 	//}	
@@ -314,37 +320,40 @@ bool Puzzle::IDFS(int depth, vector<int> currentBoard) {
 	//pathtosolution.add(currentboard);
 	solutionPath.push_back(currentBoard);
 	//If(currentboard == solvedboard)
-	if (currentBoard == wonBoard) {
+	if (currentBoard.me == wonBoard.me) {
 		return true;
 	}
 	//if (depth == 0)
-	if (depth == 0) {
+	if (depth == 0 || currentBoard.lookedAt) {
 		//	pathtosolution.remove(currentboard);
 		solutionPath.pop_back();
 		return false;
 		//}
 	}
-	cout << endl << "depth: " << depth << endl;
+	cout << endl << "depth: " << depth << " out of " << currentDepth << endl;
 	drawBoard(currentBoard);
 
 	//listofmoves = generatemoves();
-	figureOutChoices(currentBoard);
+	vector<board> listOfMoves = figureOutChoices(currentBoard);
 	//for (board in listofmoves)
-	for (int i = 0; i < moveChoices.size(); ++i) {
+	for (int i = 0; i < moveChoices.me.size(); ++i) {
 		//	recursepath = DFS(depth - 1, board));
 		previousBoard = currentBoard;
-		bool recurseSolved = IDFS(depth - 1, *choiceBoards[moveChoices[i]]);
+		figureOutChoices(currentBoard);
+		//bool recurseSolved = IDFS(depth - 1, *choiceBoards[moveChoices.me[i]]);
+		bool recurseSolved = IDFS(depth - 1, listOfMoves[i]);
 		//if (recursepath)
 		if (recurseSolved)
 			return true;
 	}
 	for (int i = 0; i < solutionPath.size() - 1; ++i) {
-		if (solutionPath[i] == currentBoard) {
-			vector<int> temp = solutionPath[i];
-			solutionPath[i] = solutionPath[i + 1];
-			solutionPath[i + 1] = temp;
+		if (solutionPath[i].me == currentBoard.me) {
+			vector<int> temp = solutionPath[i].me;
+			solutionPath[i].me = solutionPath[i + 1].me;
+			solutionPath[i + 1].me = temp;
 		}
 	}
+	currentBoard.lookedAt = true;
 	solutionPath.pop_back();
 	return false;
 }
