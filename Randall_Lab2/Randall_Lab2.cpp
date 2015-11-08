@@ -25,6 +25,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	cout << "How many times would you like to shuffle the board?" << endl;
 	cin >> shuffleTimes;
 	puzzleGame.shuffleBoard(shuffleTimes);
+	cout << "This was the starter board: " << endl;
+	puzzleGame.drawBoard(puzzleGame.startBoard);
+
 	do{
 		puzzleGame.play();
 		running = puzzleGame.isRunning();

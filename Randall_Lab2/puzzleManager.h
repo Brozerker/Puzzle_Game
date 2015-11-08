@@ -32,6 +32,7 @@ class Puzzle {
 	vector<int> * choiceBoards[4];
 	
 public:
+	vector<int> startBoard;
 	Puzzle() : n(4) {}
 	Puzzle(int n) : n(n), running(true), turns(0), solved(false), totalBoardStates(0), maxDepth(0), currentDepth(0) {
 		srand(clock());

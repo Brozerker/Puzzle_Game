@@ -4,7 +4,7 @@
 
 // shuffles board based on user input
 void Puzzle::shuffleBoard(int timesToShuffle) {
-	maxDepth = timesToShuffle;
+	maxDepth = timesToShuffle + 100;
 	for (int i = 0; i < timesToShuffle; ++i) {
 		previousBoard = puzzleBoard;
 		figureOutChoices(puzzleBoard);
@@ -16,6 +16,7 @@ void Puzzle::shuffleBoard(int timesToShuffle) {
 	}
 	if (puzzleBoard == wonBoard)
 		shuffleBoard(timesToShuffle);
+	startBoard = puzzleBoard;
 }
 
 // displays the passed vector as a grid
@@ -264,16 +265,18 @@ void Puzzle::checkWin() {
 	//	}
 	//}
 	if (solved) {
-		cout << "YOU WIN!" << endl;
-		cout << "It took " << turns << " turns to finish" << endl;
-		getchar();
-		cout << "Here's a list of the steps you took" << endl;
+		//cout << "YOU WIN!" << endl;
+		//cout << "It took " << turns << " turns to finish" << endl;
+		//getchar();
+		cout << "Here's a list of the steps that were took" << endl;
 		for (int i = 0; i < solutionPath.size(); ++i) {
-			cout << "Step " << i + 1 << ":" << endl;
+			cout << "Step " << i+1 << ":" << endl;
 			drawBoard(solutionPath[i]);
 			cout << endl;
 		}
+		cout << "Total nodes examined: " << totalBoardStates << endl;
 		getchar();
+
 	}
 }
 
@@ -285,13 +288,15 @@ void Puzzle::play() {
 	//draw();
 	//input();
 	//checkWin();
+	//currentDepth = 0;
 	//while (!solved && (maxdepth< ? ? ))
 	while (!solved && currentDepth < maxDepth) {
+		puzzleBoard = startBoard;
 		//	resetboard();
-		//createBoard();
+		//  createBoard();
 		//	solutionpath = DFS(maxdepth, shuffledboard);
+		// previousBoard = puzzleBoard;
 		bool solutionFound = IDFS(currentDepth, puzzleBoard);
-			//	maxdepth++;
 		currentDepth++;
 		if (solutionFound)
 			solved = true;
@@ -300,7 +305,10 @@ void Puzzle::play() {
 }
 
 bool Puzzle::IDFS(int depth, vector<int> currentBoard) {
-	this->currentBoard = currentBoard;
+	//if (currentBoard == previousBoard) {
+	//	solutionPath.pop_back();
+	//	return false;
+	//}	
 	//nodes_examined++;
 	totalBoardStates++;
 	//pathtosolution.add(currentboard);
@@ -310,19 +318,22 @@ bool Puzzle::IDFS(int depth, vector<int> currentBoard) {
 		return true;
 	}
 	//if (depth == 0)
-	if (depth == maxDepth) {
+	if (depth == 0) {
 		//	pathtosolution.remove(currentboard);
 		solutionPath.pop_back();
 		return false;
 		//}
 	}
+	cout << endl << "depth: " << depth << endl;
+	drawBoard(currentBoard);
 
 	//listofmoves = generatemoves();
 	figureOutChoices(currentBoard);
 	//for (board in listofmoves)
 	for (int i = 0; i < moveChoices.size(); ++i) {
 		//	recursepath = DFS(depth - 1, board));
-		bool recurseSolved = IDFS(depth + 1, *choiceBoards[moveChoices[i]]);
+		previousBoard = currentBoard;
+		bool recurseSolved = IDFS(depth - 1, *choiceBoards[moveChoices[i]]);
 		//if (recursepath)
 		if (recurseSolved)
 			return true;
