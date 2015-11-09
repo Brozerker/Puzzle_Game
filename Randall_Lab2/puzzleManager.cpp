@@ -301,11 +301,6 @@ void Puzzle::play() {
 }
 
 bool Puzzle::IDFS(int depth, board currentBoard) {
-	//this->currentBoard = currentBoard;
-	//if (currentBoard.me == previousBoard.me) {
-	//	solutionPath.pop_back();
-	//	return false;
-	//}	
 	//nodes_examined++;
 	totalBoardStates++;
 	//pathtosolution.add(currentboard);
@@ -334,14 +329,6 @@ bool Puzzle::IDFS(int depth, board currentBoard) {
 		if (recurseSolved)
 			return true;
 	}
-	//for (int i = 0; i < solutionPath.size() - 1; ++i) {
-	//	if (solutionPath[i].me == currentBoard.me) {
-	//		vector<int> temp = solutionPath[i].me;
-	//		solutionPath[i].me = solutionPath[i + 1].me;
-	//		solutionPath[i + 1].me = temp;
-	//	}
-	//}
-	//currentBoard.lookedAt = true;
 	solutionPath.pop_back();
 	return false;
 }
