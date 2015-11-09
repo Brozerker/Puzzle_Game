@@ -216,7 +216,7 @@ void Puzzle::input() {
 		cin >> input;
 	} while (input > moveChoices.me.size());
 	turns++;
-	previousBoardList.push_back(puzzleBoard);
+	//previousBoardList.push_back(puzzleBoard);
 	setNewBoard(moveChoices.me[input - 1]);
 
 }
@@ -261,18 +261,7 @@ void Puzzle::swapPositions(board &board, int pos1, int pos2) {
 
 // checks if win conditions have been met
 void Puzzle::checkWin() {
-	//bool won = true;
-	//vector<int> win(puzzleBoard.size() - 1);
-	//for (int i = 0; i < win.size(); ++i){
-	//	if (wonBoard[i] != puzzleBoard[i]) {
-	//		won = false;
-	//		break;
-	//	}
-	//}
 	if (solved) {
-		//cout << "YOU WIN!" << endl;
-		//cout << "It took " << turns << " turns to finish" << endl;
-		//getchar();
 		cout << "Here's a list of the steps that were took" << endl;
 		for (int i = 0; i < solutionPath.size(); ++i) {
 			cout << "Step " << i+1 << ":" << endl;
@@ -281,7 +270,9 @@ void Puzzle::checkWin() {
 		}
 		cout << "Total nodes examined: " << totalBoardStates << endl;
 		getchar();
-
+		getchar();
+		getchar();
+		running = false;
 	}
 }
 
@@ -310,7 +301,7 @@ void Puzzle::play() {
 }
 
 bool Puzzle::IDFS(int depth, board currentBoard) {
-	this->currentBoard = currentBoard;
+	//this->currentBoard = currentBoard;
 	//if (currentBoard.me == previousBoard.me) {
 	//	solutionPath.pop_back();
 	//	return false;
@@ -324,36 +315,33 @@ bool Puzzle::IDFS(int depth, board currentBoard) {
 		return true;
 	}
 	//if (depth == 0)
-	if (depth == 0 || currentBoard.lookedAt) {
+	if (depth == 0) {
 		//	pathtosolution.remove(currentboard);
 		solutionPath.pop_back();
 		return false;
 		//}
 	}
-	cout << endl << "depth: " << depth << " out of " << currentDepth << endl;
-	drawBoard(currentBoard);
+	//cout << endl << "depth: " << depth << " out of " << currentDepth << endl;
+	//drawBoard(currentBoard);
 
 	//listofmoves = generatemoves();
 	vector<board> listOfMoves = figureOutChoices(currentBoard);
 	//for (board in listofmoves)
-	for (int i = 0; i < moveChoices.me.size(); ++i) {
+	for (int i = 0; i < listOfMoves.size(); ++i) {
 		//	recursepath = DFS(depth - 1, board));
-		previousBoard = currentBoard;
-		figureOutChoices(currentBoard);
-		//bool recurseSolved = IDFS(depth - 1, *choiceBoards[moveChoices.me[i]]);
 		bool recurseSolved = IDFS(depth - 1, listOfMoves[i]);
 		//if (recursepath)
 		if (recurseSolved)
 			return true;
 	}
-	for (int i = 0; i < solutionPath.size() - 1; ++i) {
-		if (solutionPath[i].me == currentBoard.me) {
-			vector<int> temp = solutionPath[i].me;
-			solutionPath[i].me = solutionPath[i + 1].me;
-			solutionPath[i + 1].me = temp;
-		}
-	}
-	currentBoard.lookedAt = true;
+	//for (int i = 0; i < solutionPath.size() - 1; ++i) {
+	//	if (solutionPath[i].me == currentBoard.me) {
+	//		vector<int> temp = solutionPath[i].me;
+	//		solutionPath[i].me = solutionPath[i + 1].me;
+	//		solutionPath[i + 1].me = temp;
+	//	}
+	//}
+	//currentBoard.lookedAt = true;
 	solutionPath.pop_back();
 	return false;
 }

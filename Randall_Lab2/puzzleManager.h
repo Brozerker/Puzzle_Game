@@ -29,8 +29,8 @@ class Puzzle {
 	int turns;
 	board moveChoices;
 	board moveRight, moveLeft, moveUp, moveDown;
-	board puzzleBoard, previousBoard, wonBoard;
-	vector<board> previousBoardList;
+	board puzzleBoard, wonBoard, previousBoard;
+	//vector<board> previousBoardList;
 	int topLeftCorner, bottomLeftCorner, bottomRightCorner, topRightCorner;
 	//week 2
 	bool solved; 
