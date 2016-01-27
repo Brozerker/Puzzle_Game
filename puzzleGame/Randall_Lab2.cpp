@@ -1,4 +1,3 @@
-// GSP 480 week 1 iLab
 // written by Chris Randall
 
 #include "stdafx.h"

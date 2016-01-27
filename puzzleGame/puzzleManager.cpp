@@ -41,23 +41,15 @@ void Puzzle::drawTempBoard(int direction) {
 	switch (direction) {
 	case(UP) :
 		posToSkip -= n;
-		//moveUp = puzzleBoard;
-		//swapPositions(moveUp, posToSkip, tempPos);
 		break;
 	case(DOWN) :
 		posToSkip += n;
-		//moveDown = puzzleBoard;
-		//swapPositions(moveDown, posToSkip, tempPos);
 		break;
 	case(LEFT) :
 		posToSkip -= 1;
-		//moveLeft = puzzleBoard;
-		//swapPositions(moveLeft, posToSkip, tempPos);
 		break;
 	case(RIGHT) :
 		posToSkip += 1;
-		//moveRight = puzzleBoard;
-		//swapPositions(moveRight, posToSkip, tempPos);
 		break;
 	}
 	swapPositions(tempBoard, posToSkip, tempPos);
@@ -72,27 +64,15 @@ board Puzzle::setChoiceBoard(int direction, board currentB) {
 	switch (direction) {
 	case(UP) :
 		tempPos -= n;
-		//moveUp.me.clear();
-		//moveUp = currentBoard;
-		//swapPositions(moveUp, posToSkip, tempPos);
 		break;
 	case(DOWN) :
 		tempPos += n;
-		//moveDown.me.clear();
-		//moveDown = currentBoard;
-		//swapPositions(moveDown, posToSkip, tempPos);
 		break;
 	case(LEFT) :
 		tempPos -= 1;
-		//moveLeft.me.clear();
-		//moveLeft = currentBoard;
-		//swapPositions(moveLeft, posToSkip, tempPos);
 		break;
 	case(RIGHT) :
 		tempPos += 1;
-		//moveRight.me.clear();
-		//moveRight = currentBoard;
-		//swapPositions(moveRight, posToSkip, tempPos);
 		break;
 	}
 	swapPositions(tempBoard, posToSkip, tempPos);
@@ -191,7 +171,6 @@ vector<board> Puzzle::figureOutChoices(board currentBoard) {
 
 // draws the potential choices for the users next move
 void Puzzle::drawChoices() {
-	//figureOutChoices();
 	cout << "Here are your choices for the next move:" << endl;
 	for (int i = 0; i < moveChoices.me.size(); ++i) {
 		cout << "(" << i + 1 << ")" << endl;
@@ -201,7 +180,6 @@ void Puzzle::drawChoices() {
 
 // main draw function to be called by main
 void Puzzle::draw() {
-	//cout << "\n\nHere's the current board" << endl;
 	drawBoard(puzzleBoard.me);
 	cout << endl;
 	drawChoices();
@@ -216,7 +194,6 @@ void Puzzle::input() {
 		cin >> input;
 	} while (input > moveChoices.me.size());
 	turns++;
-	//previousBoardList.push_back(puzzleBoard);
 	setNewBoard(moveChoices.me[input - 1]);
 
 }
@@ -281,17 +258,8 @@ bool Puzzle::isRunning() {
 }
 
 void Puzzle::play() {
-	//draw();
-	//input();
-	//checkWin();
-	//currentDepth = 0;
-	//while (!solved && (maxdepth< ? ? ))
 	while (!solved && currentDepth < maxDepth) {
 		puzzleBoard = startBoard;
-		//	resetboard();
-		//  createBoard();
-		//	solutionpath = DFS(maxdepth, shuffledboard);
-		// previousBoard = puzzleBoard;
 		bool solutionFound = IDFS(currentDepth, puzzleBoard);
 		currentDepth++;
 		if (solutionFound)
@@ -301,31 +269,18 @@ void Puzzle::play() {
 }
 
 bool Puzzle::IDFS(int depth, board currentBoard) {
-	//nodes_examined++;
 	totalBoardStates++;
-	//pathtosolution.add(currentboard);
 	solutionPath.push_back(currentBoard);
-	//If(currentboard == solvedboard)
 	if (currentBoard.me == wonBoard.me) {
 		return true;
 	}
-	//if (depth == 0)
 	if (depth == 0) {
-		//	pathtosolution.remove(currentboard);
 		solutionPath.pop_back();
 		return false;
-		//}
 	}
-	//cout << endl << "depth: " << depth << " out of " << currentDepth << endl;
-	//drawBoard(currentBoard);
-
-	//listofmoves = generatemoves();
 	vector<board> listOfMoves = figureOutChoices(currentBoard);
-	//for (board in listofmoves)
 	for (int i = 0; i < listOfMoves.size(); ++i) {
-		//	recursepath = DFS(depth - 1, board));
 		bool recurseSolved = IDFS(depth - 1, listOfMoves[i]);
-		//if (recursepath)
 		if (recurseSolved)
 			return true;
 	}
